@@ -11,6 +11,11 @@ namespace OrderBot
 
         private State nCur = State.WELCOMING;
         private int nNumber;
+
+        private string welcomeMessage = @"Welcome to BENN's curbside pickup ordering platform
+        
+        Please enter the amount of carbs, proteins and fats you require in your food in this order in comma separated format, 
+        for example: 8,9,2 would mean you want 8 grams of carbs, 9 grams of protein and 2 grams of fats";
         public Order(int nTest = -1)
         {
             if(nTest == -1){
@@ -25,7 +30,7 @@ namespace OrderBot
 
         public String OnMessage(String sInMessage)
         {
-            String sMessage = "Welcome, I am thinking of a number between 1 and 100 ... Please guess";
+            String sMessage = this.welcomeMessage;
             switch (this.nCur)
             {
                 case State.WELCOMING:

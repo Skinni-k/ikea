@@ -11,9 +11,12 @@ namespace OrderBotPage
 {
     public class Program
     {
+
         public static void Main(string[] args)
         {
+            Seeder.Seed();
             CreateHostBuilder(args).Build().Run();
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
