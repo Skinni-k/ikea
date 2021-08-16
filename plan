@@ -1,0 +1,34 @@
+Messages
+    Welcome Message -> 
+    calories -> Enter a value from 0 to 100 for the amount of calories
+    fats -> Enter a value from 0 to 100 for the amount of fats
+    proteins -> Enter a value from 0 to 100 for the amount of proteins
+    meal found -> Here are the meals we found for the given criteria
+    meal not found -> We're sorry, we could not find any meals matching this criteria
+    confirm message -> Are you sure this order is correct? 
+    restart -> If you would like to create a new order
+    Payment succesful -> Payment done succesfully
+    Payment Rejected -> Payment Rejected
+    Order succesful -> Order placed succesfully
+    Order declined -> Order declined
+
+Find Meal
+    If found -> display it (max three)
+    Else we dont have any at the momment -> restart
+    Enter a value from 1 to 3 to choose a meal
+    if Confirm message yes -> go to payment
+    else restart 
+
+Payment
+    Payment succesful -> order succesful -> restart
+    else Payment Rejected -> order declined -> restart
+
+Models
+    Payment model -> initially false, if done properly then true
+    MealSearch model -> check if all 3 fields are there and start searching on PROTEINS status
+    Status model -> display message, get Next Status (check validity), go to next status
+
+Special Statuses
+    PROTEINS -> Search meal
+    MEAL_FOUND -> Display the meals
+    PAYMENT -> Go to link and make sure payment is done

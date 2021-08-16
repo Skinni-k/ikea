@@ -1,70 +1,97 @@
 ﻿using System;
+using Microsoft.Data.Sqlite;
 
 namespace OrderBot
 {
     public class Order
     {
-        private enum State
+        private Status status;
+        private static SqliteConnection connection;
+        private MealSearch mealsearch = new MealSearch();
+        private static void Connect()
         {
-            WELCOMING, GUESSING
+            connection = Sqlite.GetConnection();
+            connection.Open();
+        }
+        public Order()
+        {
+            Connect();
         }
 
-        private State nCur = State.WELCOMING;
-        private int nNumber;
-
-        private string welcomeMessage = @"Welcome to BENN's curbside pickup ordering platform
-        
-        Please enter the amount of carbs, proteins and fats you require in your food in this order in comma separated format, 
-        for example: 8,9,2 would mean you want 8 grams of carbs, 9 grams of protein and 2 grams of fats";
-        public Order(int nTest = -1)
+        private Status getStatus(Boolean success)
         {
-            if(nTest == -1){
-                Random rnd = new Random();
-                this.nNumber = rnd.Next(1, 99);
-
-            }else{
-                this.nNumber = nTest;
-            }
-
+            this.status.nextState(connection, success);
+            return this.status;
         }
 
         public String OnMessage(String sInMessage)
         {
-            String sMessage = this.welcomeMessage;
-            switch (this.nCur)
-            {
-                case State.WELCOMING:
-                    this.nCur = State.GUESSING;
-                    break;
-                case State.GUESSING:
-                    try
-                    {
-                        int nGuess = Int32.Parse(sInMessage);
-                        if (nGuess > this.nNumber)
-                        {
-                            sMessage = "Too high";
-                        }
-                        else if (nGuess < this.nNumber)
-                        {
-                            sMessage = "Too low";
-                        }
-                        else
-                        {
-                            sMessage = "Just Right ... Guess my new number";
-                            Random rnd = new Random();
-                            this.nNumber = rnd.Next(1, 99);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        sMessage = "Enter a number between 1 and 100";
-                    }
-                    break;
+            String sMessage, append = "\n";
 
+            if (this.status == null)
+            {
+                // Create Status with first status
+                this.status = new Status(connection);
+                sMessage = this.status.message;
+                System.Diagnostics.Debug.WriteLine(sMessage);
+                return sMessage;
             }
+            Boolean valid = this.status.validValue(sInMessage);
+            if (!valid) return this.status.message;
+
+            dynamic value;
+            if (this.status.type == "Number") value = Int32.Parse(sInMessage);
+            else value = sInMessage;
+
+            switch (this.status.name)
+            {
+                case "PROTEINS":
+                    this.mealsearch.proteins = value;
+                    valid = mealsearch.searchMeal(connection);
+                    for (int i = 0; i < mealsearch.meals.Count; i++)
+                    {
+                        int j = i + 1;
+                        append += "\n" + j + ". " + mealsearch.meals[i];
+                    }
+                    break;
+                case "FATS":
+                    this.mealsearch.fats = value;
+                    break;
+                case "CALORIES":
+                    this.mealsearch.calories = value;
+                    break;
+                case "MEAL_FOUND":
+                    if (value > 3 || value < 1)
+                    {
+
+                        for (int i = 0; i < mealsearch.meals.Count; i++)
+                        {
+                            int j = i + 1;
+                            append += "\n" + j + ". " + mealsearch.meals[i];
+                        }
+                        append += "\nPlease type a number between 1 and 3";
+                        valid = false;
+                    }
+                    else
+                    {
+                        mealsearch.selectedMeal = mealsearch.meals[value - 1];
+                        append += "\n" + mealsearch.selectedMeal;
+                    }
+                    break;
+                case "CONFIRM_MEAL":
+                    if (sInMessage.ToLower() == "yes")
+                    {
+                        append += "http://localhost:5000/payment?meal=" + mealsearch.selectedMeal;
+                        valid = true;
+                    }
+                    else valid = false;
+                    break;
+            }
+
+            status = this.getStatus(valid);
+            sMessage = this.status.message + append;
             System.Diagnostics.Debug.WriteLine(sMessage);
             return sMessage;
         }
-
     }
 }

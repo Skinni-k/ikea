@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OrderBot;
 
 namespace OrderBotPage
 {
@@ -14,9 +15,8 @@ namespace OrderBotPage
 
         public static void Main(string[] args)
         {
-            Seeder.Seed();
+            // Seeder.Seed();
             CreateHostBuilder(args).Build().Run();
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
