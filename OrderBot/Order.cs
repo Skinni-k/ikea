@@ -6,16 +6,17 @@ namespace OrderBot
     public class Order
     {
         private Status status;
-        private static SqliteConnection connection;
+        private SqliteConnection connection;
         private MealSearch mealsearch = new MealSearch();
-        private static void Connect()
+        // private static void Connect()
+        // {
+        //     SqliteConnection connection = Sqlite.GetConnection();
+        //     connection.Open();
+        // }
+        public Order(SqliteConnection connection)
         {
-            connection = Sqlite.GetConnection();
+            this.connection = connection;
             connection.Open();
-        }
-        public Order()
-        {
-            Connect();
         }
 
         private Status getStatus(Boolean success)

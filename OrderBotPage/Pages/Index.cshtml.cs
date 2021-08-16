@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Twilio;
 using Twilio.TwiML;
 using OrderBot;
+using Microsoft.Data.Sqlite;
 
 
 namespace wireless.Pages
 {
 
 
- [IgnoreAntiforgeryToken(Order = 1001)]
+    [IgnoreAntiforgeryToken(Order = 1001)]
     public class IndexModel : PageModel
     {
         private static Dictionary<string, Order> aOrders = null;
@@ -23,11 +24,14 @@ namespace wireless.Pages
             string sFrom = Request.Form["From"];
             string sBody = Request.Form["Body"];
             var oMessage = new Twilio.TwiML.MessagingResponse();
-            if(aOrders == null){
+            if (aOrders == null)
+            {
                 aOrders = new Dictionary<string, Order>();
             }
-            if(!aOrders.ContainsKey(sFrom)){
-                aOrders[sFrom] = new Order();
+            if (!aOrders.ContainsKey(sFrom))
+            {
+                SqliteConnection connection = Sqlite.GetConnection();
+                aOrders[sFrom] = new Order(connection);
             }
             oMessage.Message(aOrders[sFrom].OnMessage(sBody));
             return Content(oMessage.ToString(), "application/xml");
