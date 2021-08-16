@@ -18,8 +18,8 @@
         src="https://www.paypal.com/sdk/js?client-id=Af00BKRqsvRypY6x92ePJtEvdfNRWL64sopZEW68OAmqrT6tPs1pQ-iYE_Dl8cjnOMM6sg8pPIY-iNYk"> // Required. Replace SB_CLIENT_ID with your sandbox client ID.
         </script>
     <div>
-        <h1>You ordered <code>@(Request.Query["meal"])</code> for @Model.Cost CAD. </h1>
-        <h1>Please pay below. </h1>
+        <h3>You ordered @(Request.Query["meal"]) for @Model.Cost CAD. </h3>
+        <p>Please pay below. </p>
     </div>
     <div id="paypal-button-container"></div>
 

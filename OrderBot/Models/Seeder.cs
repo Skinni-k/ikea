@@ -108,23 +108,14 @@ namespace OrderBot
                 insertCmd.CommandText = "INSERT INTO statuses VALUES('MEAL_NOT_FOUND', 'We are sorry, we could not find any meals matching this criteria. Send any message to continue.', 'RESTART', 'ERROR', 'String')";
                 insertCmd.ExecuteNonQuery();
 
-                insertCmd.CommandText = "INSERT INTO statuses VALUES('CONFIRM_MEAL', 'Please type Yes if this order is correct: ', 'PAYMENT', 'WELCOME', 'Boolean')";
+                insertCmd.CommandText = "INSERT INTO statuses VALUES('CONFIRM_MEAL', 'Please type Yes if this order is correct: ', 'ADDRESS', 'WELCOME', 'String')";
                 insertCmd.ExecuteNonQuery();
 
-                insertCmd.CommandText = "INSERT INTO statuses VALUES('PAYMENT', 'Click on this link to start payment for the order: ', 'PAY_SUCCESS', 'PAY_REJECT', 'String')";
+                insertCmd.CommandText = "INSERT INTO statuses VALUES('ADDRESS', 'Please type the address to which you want the order to be delivered', 'PAYMENT', 'WELCOME', 'String')";
                 insertCmd.ExecuteNonQuery();
 
-                // insertCmd.CommandText = "INSERT INTO statuses VALUES('PAY_SUCCESS', 'Payment done succesfully. Send any message to continue.', 'ORDER_SUCCESS', 'ERROR', 'String')";
-                // insertCmd.ExecuteNonQuery();
-
-                // insertCmd.CommandText = "INSERT INTO statuses VALUES('PAY_REJECT', 'Payment Rejected. Send any message to continue.', 'ORDER_REJECT', 'ERROR', 'String')";
-                // insertCmd.ExecuteNonQuery();
-
-                // insertCmd.CommandText = "INSERT INTO statuses VALUES('ORDER_SUCCESS', 'Order placed succesfully. Send any message to continue.', 'RESTART', 'ERROR', 'String')";
-                // insertCmd.ExecuteNonQuery();
-
-                // insertCmd.CommandText = "INSERT INTO statuses VALUES('ORDER_REJECT', 'Order declined. Send any message to continue.', 'RESTART', 'ERROR', 'String')";
-                // insertCmd.ExecuteNonQuery();
+                insertCmd.CommandText = "INSERT INTO statuses VALUES('PAYMENT', 'Click on this link to start payment for the order: \n', 'WELCOME', 'WELCOME', 'String')";
+                insertCmd.ExecuteNonQuery();
 
                 transaction.Commit();
             }

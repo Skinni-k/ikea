@@ -26,7 +26,7 @@ namespace OrderBot
 
         public String OnMessage(String sInMessage)
         {
-            String sMessage, append = "\n";
+            String sMessage, append = "";
 
             if (this.status == null)
             {
@@ -79,12 +79,11 @@ namespace OrderBot
                     }
                     break;
                 case "CONFIRM_MEAL":
-                    if (sInMessage.ToLower() == "yes")
-                    {
-                        append += "http://localhost:5000/payment?meal=" + mealsearch.selectedMeal;
-                        valid = true;
-                    }
+                    if (sInMessage.ToLower() == "yes") valid = true;
                     else valid = false;
+                    break;
+                case "ADDRESS":
+                    append += "http://localhost:5000/payment?meal=" + mealsearch.selectedMeal;
                     break;
             }
 
