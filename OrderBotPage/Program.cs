@@ -15,7 +15,7 @@ namespace OrderBotPage
 
         public static void Main(string[] args)
         {
-            Seeder.Seed();
+            // Seeder.Seed();
             CreateHostBuilder(args).Build().Run();
         }
 
